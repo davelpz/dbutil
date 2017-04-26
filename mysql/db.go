@@ -1,4 +1,4 @@
-package database
+package mysql
 
 import (
 	"database/sql"
@@ -7,19 +7,19 @@ import (
 	_ "github.com/go-sql-driver/mysql" //needed for mysql drivers
 )
 
-const mock = true
-
 // DataBase - holds all info on a database connection
 type DataBase struct {
-	URL     string
+	url     string
 	db      *sql.DB
 	tx      *sql.Tx
 	stmtMap map[string]*sql.Stmt
 }
 
 // Open - open database connection to db specified by URL
-func (d *DataBase) Open() error {
-	db, err := sql.Open("mysql", d.URL)
+func (d *DataBase) Open(dbURL string) error {
+	d.url = dbURL
+
+	db, err := sql.Open("mysql", d.url)
 	if err != nil {
 		return err
 	}

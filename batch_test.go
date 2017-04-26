@@ -1,4 +1,4 @@
-package database
+package goutil
 
 import (
 	"fmt"
