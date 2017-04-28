@@ -1,10 +1,11 @@
-package mysql
+package db
 
 import (
 	"database/sql"
 	"errors"
 
 	_ "github.com/go-sql-driver/mysql" //needed for mysql drivers
+	_ "github.com/mattn/go-sqlite3"    //needed for sqlite3 drivers
 )
 
 // DataBase - holds all info on a database connection
@@ -16,10 +17,10 @@ type DataBase struct {
 }
 
 // Open - open database connection to db specified by URL
-func (d *DataBase) Open(dbURL string) error {
+func (d *DataBase) Open(driverName, dbURL string) error {
 	d.url = dbURL
 
-	db, err := sql.Open("mysql", d.url)
+	db, err := sql.Open(driverName, d.url)
 	if err != nil {
 		return err
 	}

@@ -1,4 +1,4 @@
-package mysql
+package db
 
 import (
 	"database/sql"
@@ -37,7 +37,7 @@ func TestDataBase_Open(t *testing.T) {
 				tx:      tt.fields.tx,
 				stmtMap: tt.fields.stmtMap,
 			}
-			if err := d.Open(tt.args.dbURL); (err != nil) != tt.wantErr {
+			if err := d.Open("mysql", tt.args.dbURL); (err != nil) != tt.wantErr {
 				t.Errorf("DataBase.Open() error = %v, wantErr %v", err, tt.wantErr)
 			} else {
 				//fmt.Println(err)
@@ -49,7 +49,7 @@ func TestDataBase_Open(t *testing.T) {
 func TestDataBase_ExecSQL(t *testing.T) {
 	d := &DataBase{}
 
-	err := d.Open("root:Baxter5537@/unittest")
+	err := d.Open("mysql", "root:Baxter5537@/unittest")
 	if err != nil {
 		t.Fatal(err)
 	}

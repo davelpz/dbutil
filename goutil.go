@@ -3,12 +3,12 @@ package goutil
 import (
 	"database/sql"
 
-	"github.com/davelpz/goutil/mysql"
+	"github.com/davelpz/goutil/db"
 )
 
 // DataBaseProvider - Interface for all database providers
 type DataBaseProvider interface {
-	Open(dbURL string) error
+	Open(driverName, dbURL string) error
 	Close() error
 	Begin() error
 	Rollback() error
@@ -22,9 +22,9 @@ type DataBaseProvider interface {
 }
 
 // OpenDatabase - open a database, returns a DataBaseProvider
-func OpenDatabase(dbURL string) (DataBaseProvider, error) {
-	var d DataBaseProvider = &mysql.DataBase{}
-	err := d.Open(dbURL)
+func OpenDatabase(driverName, dbURL string) (DataBaseProvider, error) {
+	var d DataBaseProvider = &db.DataBase{}
+	err := d.Open(driverName, dbURL)
 	if err != nil {
 		return nil, err
 	}
