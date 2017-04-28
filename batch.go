@@ -1,21 +1,29 @@
 package goutil
 
-import "errors"
+import (
+	"database/sql"
+	"errors"
+)
 
 // Batch - holdes batches of two dimensional arrays
 type Batch struct {
-	rows      []interface{}
-	batchSize int
-	rowSize   int
-	callback  func(rows []interface{}) error
+	rows       []interface{}
+	batchSize  int
+	rowSize    int
+	callback   func(rows []interface{}) error
+	dbProvider DataBaseProvider
 }
 
-// Init - initialize a Batch struct
-func (b *Batch) Init(batchSize int, rowSize int, callback func(rows []interface{}) error) {
+// New - initialize a Batch struct
+func New(dbProvider DataBaseProvider, batchSize int, rowSize int, callback func(rows []interface{}) error) *Batch {
+	b := Batch{}
+	b.dbProvider = dbProvider
 	b.batchSize = batchSize
 	b.rowSize = rowSize
 	b.rows = make([]interface{}, 0, batchSize*rowSize)
 	b.callback = callback
+
+	return &b
 }
 
 // Add - add a row to the Batch struct
@@ -50,4 +58,38 @@ func (b *Batch) Clear() {
 // Call - call the callback function, passing Batch.rows as the argument
 func (b *Batch) Call() error {
 	return b.callback(b.rows)
+}
+
+func (b *Batch) Open(driverName, dbURL string) error {
+	return b.dbProvider.Open(driverName, dbURL)
+}
+func (b *Batch) Close() error {
+	return b.dbProvider.Close()
+}
+func (b *Batch) Begin() error {
+	return b.dbProvider.Begin()
+}
+func (b *Batch) Rollback() error {
+	return b.dbProvider.Rollback()
+}
+func (b *Batch) Commit() error {
+	return b.dbProvider.Commit()
+}
+func (b *Batch) Prepare(name, query string) error {
+	return b.dbProvider.Prepare(name, query)
+}
+func (b *Batch) Exec(name string, args ...interface{}) (sql.Result, error) {
+	return b.dbProvider.Exec(name, args)
+}
+func (b *Batch) Query(name string, args ...interface{}) (*sql.Rows, error) {
+	return b.dbProvider.Query(name, args)
+}
+func (b *Batch) CloseStmt(name string) error {
+	return b.dbProvider.CloseStmt(name)
+}
+func (b *Batch) ExecSQL(query string, args ...interface{}) (sql.Result, error) {
+	return b.dbProvider.ExecSQL(query, args)
+}
+func (b *Batch) QuerySQL(query string, args ...interface{}) (*sql.Rows, error) {
+	return b.dbProvider.QuerySQL(query, args)
 }
