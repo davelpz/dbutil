@@ -79,17 +79,17 @@ func (b *Batch) Prepare(name, query string) error {
 	return b.dbProvider.Prepare(name, query)
 }
 func (b *Batch) Exec(name string, args ...interface{}) (sql.Result, error) {
-	return b.dbProvider.Exec(name, args)
+	return b.dbProvider.Exec(name, args...)
 }
 func (b *Batch) Query(name string, args ...interface{}) (*sql.Rows, error) {
-	return b.dbProvider.Query(name, args)
+	return b.dbProvider.Query(name, args...)
 }
 func (b *Batch) CloseStmt(name string) error {
 	return b.dbProvider.CloseStmt(name)
 }
 func (b *Batch) ExecSQL(query string, args ...interface{}) (sql.Result, error) {
-	return b.dbProvider.ExecSQL(query, args)
+	return b.dbProvider.ExecSQL(query, args...)
 }
 func (b *Batch) QuerySQL(query string, args ...interface{}) (*sql.Rows, error) {
-	return b.dbProvider.QuerySQL(query, args)
+	return b.dbProvider.QuerySQL(query, args...)
 }

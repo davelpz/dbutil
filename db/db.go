@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"errors"
 
+	"log"
+
 	_ "github.com/go-sql-driver/mysql" //needed for mysql drivers
 	_ "github.com/mattn/go-sqlite3"    //needed for sqlite3 drivers
 )
@@ -40,6 +42,16 @@ func (d *DataBase) Open(driverName, dbURL string) error {
 
 // Close - close connection
 func (d *DataBase) Close() error {
+
+	// loop and close all prepared statements
+	for key := range d.stmtMap {
+		err := d.CloseStmt(key)
+		if err != nil {
+			log.Print(err)
+			//return err
+		}
+	}
+
 	return d.db.Close()
 }
 
@@ -128,6 +140,9 @@ func (d *DataBase) CloseStmt(name string) error {
 	if !ok {
 		return errors.New("statement " + name + " not found")
 	}
+
+	//delete the statment from the map
+	delete(d.stmtMap, name)
 
 	return stmt.Close()
 }
