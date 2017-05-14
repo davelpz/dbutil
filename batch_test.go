@@ -1,4 +1,4 @@
-package goutil
+package dbutil
 
 import (
 	"encoding/json"
