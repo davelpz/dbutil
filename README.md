@@ -1,4 +1,4 @@
-# goutil
+# dbutil
 Playing and Learning go
 
-misc golang utils - not usefull for anyone :-)
+Some db utilities I've been playing with
